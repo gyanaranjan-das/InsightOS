@@ -19,6 +19,6 @@ const projectSchema = new Schema<IProject>(
 );
 
 projectSchema.index({ orgId: 1 });
-projectSchema.index({ apiKey: 1 });
+
 
 export const Project = mongoose.model<IProject>('Project', projectSchema);
