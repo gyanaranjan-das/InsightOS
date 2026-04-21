@@ -5,9 +5,7 @@ import { authMiddleware } from '../middleware/auth';
 
 const router = Router();
 
-/* ── API Key authenticated (tracking) ──────────────────── */
-router.post('/', apiKeyAuth, trackEvent);
-router.post('/batch', apiKeyAuth, trackBatch);
+// Intentionally omitted - tracking logic is handled via trackRoutes
 
 /* ── JWT authenticated (analytics) ─────────────────────── */
 router.get('/', authMiddleware, listEvents);

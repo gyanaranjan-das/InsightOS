@@ -13,6 +13,7 @@ import { connectRedis } from './utils/redis';
 import { setupSocketServer } from './realtime/socketServer';
 import authRoutes from './routes/auth';
 import eventRoutes from './routes/events';
+import trackRoutes from './routes/track';
 import aiRoutes from './routes/ai';
 import dashboardRoutes from './routes/dashboard';
 import orgRoutes from './routes/org';
@@ -33,7 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 /* ── Routes ────────────────────────────────────────────── */
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
-app.use('/api/track', eventRoutes);
+app.use('/api/track', trackRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/dashboards', dashboardRoutes);
 app.use('/api/org', orgRoutes);
