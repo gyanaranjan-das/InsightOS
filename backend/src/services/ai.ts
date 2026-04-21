@@ -17,7 +17,7 @@ interface AIResult {
 
 async function getOrgContext(orgId: string): Promise<string> {
   const projects = await Project.find({ orgId }).select('_id');
-  const projectIds = projects.map((p) => new mongoose.Types.ObjectId(p._id as string));
+  const projectIds = projects.map((p) => new mongoose.Types.ObjectId(p._id.toString()));
 
   const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
 

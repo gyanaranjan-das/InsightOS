@@ -256,7 +256,7 @@ export async function funnelAnalysis(req: AuthRequest, res: Response): Promise<v
     const projectIds = await getOrgProjectIds(orgId);
     const objectIds = projectIds.map((id) => new mongoose.Types.ObjectId(id));
 
-    const funnelData = [];
+    const funnelData: Array<{step: string, count: number, conversionRate: number, dropOff: number}> = [];
 
     for (let i = 0; i < steps.length; i++) {
       const count = await Event.countDocuments({

@@ -103,8 +103,8 @@ export function TeamSettings() {
         </div>
         {isAdmin && (
           <Dialog open={inviteOpen} onOpenChange={setInviteOpen}>
-            <DialogTrigger asChild>
-              <Button>Invite Member</Button>
+            <DialogTrigger>
+              <span className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">Invite Member</span>
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
@@ -122,7 +122,7 @@ export function TeamSettings() {
                 </div>
                 <div className="grid gap-2">
                   <Label htmlFor="role">Role</Label>
-                  <Select value={inviteData.role} onValueChange={(role) => setInviteData({ ...inviteData, role })}>
+                  <Select value={inviteData.role} onValueChange={(role: string | null) => setInviteData({ ...inviteData, role: role || 'MEMBER' })}>
                     <SelectTrigger><SelectValue placeholder="Select a role" /></SelectTrigger>
                     <SelectContent>
                       <SelectItem value="ADMIN">Admin</SelectItem>
@@ -175,7 +175,7 @@ export function TeamSettings() {
                     </TableCell>
                     <TableCell>
                       {isAdmin && member.role !== 'OWNER' && user?.id !== member._id ? (
-                        <Select value={member.role} onValueChange={(r) => handleRoleChange(member._id, r)}>
+                        <Select value={member.role} onValueChange={(r: string | null) => handleRoleChange(member._id, r || 'MEMBER')}>
                           <SelectTrigger className="w-[110px] h-8 text-xs">
                             <SelectValue />
                           </SelectTrigger>

@@ -77,17 +77,17 @@ export function Topbar() {
           <div className="hidden lg:block lg:h-6 lg:w-px lg:bg-border" aria-hidden="true" />
 
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="relative h-8 w-8 rounded-full border border-border">
+            <DropdownMenuTrigger>
+              <div className="relative h-8 w-8 rounded-full border border-border cursor-pointer hover:opacity-80 overflow-hidden">
                 <Avatar className="h-8 w-8">
                   <AvatarImage src={user.avatarUrl || ''} alt={user.name} />
                   <AvatarFallback className="bg-primary/10 text-primary font-medium text-xs">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
-              </Button>
+              </div>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="end" forceMount>
+            <DropdownMenuContent className="w-56" align="end">
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
                   <p className="text-sm font-medium leading-none truncate">{user.name}</p>

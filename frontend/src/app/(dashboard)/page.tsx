@@ -59,7 +59,7 @@ export default function DashboardOverview() {
           <p className="text-muted-foreground mt-1">Monitor your core SaaS metrics and user activity.</p>
         </div>
         <div className="flex items-center space-x-2">
-          <Select value={days} onValueChange={setDays}>
+          <Select value={days} onValueChange={(val: string | null) => setDays(val || '30')}>
             <SelectTrigger className="w-[180px] bg-background">
               <SelectValue placeholder="Select period" />
             </SelectTrigger>
