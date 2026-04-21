@@ -1,26 +1,46 @@
 "use client";
 
-import { motion, Variants } from "framer-motion";
-import { ArrowRight, Bot, Lock, Activity, Code2, Globe } from "lucide-react";
+import {
+  motion,
+  Variants,
+  useScroll,
+  useTransform,
+  useMotionTemplate,
+  useMotionValue,
+} from "framer-motion";
+import {
+  ArrowRight,
+  Bot,
+  Lock,
+  Activity,
+  Code2,
+  Globe,
+  Database,
+  Network,
+  ChevronRight,
+} from "lucide-react";
 import Link from "next/link";
+import { useRef, MouseEvent } from "react";
 
 /* ── Animation Variants ──────────────────────────────────── */
-const FADE_UP_ANIMATION_VARIANTS: Variants = {
-  hidden: { opacity: 0, y: 10 },
+const FADE_UP_VARIANTS: Variants = {
+  hidden: { opacity: 0, y: 30 },
   show: {
     opacity: 1,
     y: 0,
-    transition: { type: "spring", stiffness: 100, damping: 15 },
+    transition: { type: "spring", stiffness: 80, damping: 20 },
   },
 };
 
 /* ── Navbar ──────────────────────────────────────────────── */
 export function MarketingNavbar() {
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/5 bg-background/50 backdrop-blur-md">
+    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-white/[0.05] bg-background/50 backdrop-blur-xl">
       <div className="container mx-auto px-6 h-16 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Activity className="h-6 w-6 text-primary" />
+          <div className="bg-primary/20 p-1.5 rounded-lg border border-primary/30">
+            <Activity className="h-5 w-5 text-primary" />
+          </div>
           <span className="font-bold text-lg tracking-tight">InsightOS</span>
         </div>
         <div className="flex items-center gap-4">
@@ -32,7 +52,7 @@ export function MarketingNavbar() {
           </Link>
           <Link
             href="/register"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-9 px-4 py-2"
+            className="inline-flex items-center justify-center rounded-lg text-sm font-semibold transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_20px_rgba(var(--primary),0.3)] h-9 px-5 py-2"
           >
             Get Started
           </Link>
@@ -44,132 +64,237 @@ export function MarketingNavbar() {
 
 /* ── Hero ────────────────────────────────────────────────── */
 export function HeroSection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
+
   return (
-    <section className="relative pt-32 pb-20 overflow-hidden">
-      <div className="container mx-auto px-6 relative z-10">
+    <section
+      ref={ref}
+      className="relative pt-32 pb-32 overflow-hidden min-h-[90vh] flex items-center"
+    >
+      {/* Dynamic Background Mesh */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[150px] animate-pulse" />
+        <div
+          className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/20 blur-[150px] animate-pulse"
+          style={{ animationDelay: "2s" }}
+        />
+      </div>
+
+      <motion.div
+        style={{ y, opacity }}
+        className="container mx-auto px-6 relative z-10"
+      >
         <motion.div
           initial="hidden"
           animate="show"
-          viewport={{ once: true }}
           variants={{
             hidden: {},
-            show: {
-              transition: {
-                staggerChildren: 0.15,
-              },
-            },
+            show: { transition: { staggerChildren: 0.1 } },
           }}
-          className="max-w-4xl mx-auto text-center"
+          className="max-w-5xl mx-auto text-center"
         >
           <motion.div
-            variants={FADE_UP_ANIMATION_VARIANTS}
-            className="mb-6 flex justify-center"
+            variants={FADE_UP_VARIANTS}
+            className="mb-8 flex justify-center"
           >
-            <span className="inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-              <Globe className="h-3 w-3 mr-2" />
-              InsightOS v1.0 is now live
-            </span>
+            <div className="relative group overflow-hidden rounded-full p-[1px]">
+              <span className="absolute inset-0 rounded-full bg-[image:linear-gradient(to_right,rgba(255,255,255,0),rgba(255,255,255,0.5),rgba(255,255,255,0))] animate-[spin_2s_linear_infinite]" />
+              <div className="inline-flex items-center rounded-full bg-background/90 backdrop-blur-xl px-4 py-1.5 text-xs font-semibold text-primary/80 ring-1 ring-white/10">
+                <Globe className="h-3.5 w-3.5 mr-2 text-primary animate-pulse" />
+                <span>InsightOS V1 Architecture Out Now</span>
+                <ChevronRight className="h-3.5 w-3.5 ml-1 text-muted-foreground" />
+              </div>
+            </div>
           </motion.div>
+
           <motion.h1
-            variants={FADE_UP_ANIMATION_VARIANTS}
-            className="text-5xl md:text-7xl font-extrabold tracking-tight mb-8 bg-gradient-to-br from-foreground to-foreground/60 bg-clip-text text-transparent"
+            variants={FADE_UP_VARIANTS}
+            className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-8 leading-[1.1]"
           >
-            Stop Guessing. Start Tracking Your SaaS Success Today.
+            Measure SaaS Scale with{" "}
+            <span className="bg-gradient-to-r from-primary via-purple-500 to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_8s_ease_infinite]">
+              Algorithmic Precision.
+            </span>
           </motion.h1>
+
           <motion.p
-            variants={FADE_UP_ANIMATION_VARIANTS}
-            className="text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
+            variants={FADE_UP_VARIANTS}
+            className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-3xl mx-auto font-medium"
           >
-            Connect raw behavioral tracking with our vector-embedded generative
-            AI data explorer to scale deterministic funnels in real-time.
+            Merge raw telemetry logs with native vector-embedded generative AI
+            parsing to scale deterministic analytics matrices instantaneously.
           </motion.p>
+
           <motion.div
-            variants={FADE_UP_ANIMATION_VARIANTS}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4"
+            variants={FADE_UP_VARIANTS}
+            className="flex flex-col sm:flex-row items-center justify-center gap-6"
           >
             <Link
               href="/register"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-11 px-8"
+              className="group relative inline-flex items-center justify-center rounded-xl text-base font-bold transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground shadow-[0_0_40px_rgba(var(--primary),0.5)] h-14 px-10 overflow-hidden"
             >
-              Start Engineering Your Data{" "}
-              <ArrowRight className="ml-2 h-4 w-4" />
+              <span className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+              <span className="relative z-10 flex items-center">
+                Initialize Matrix{" "}
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </span>
             </Link>
             <Link
               href="/login"
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-11 px-8"
+              className="inline-flex items-center justify-center rounded-xl text-base font-semibold transition-all hover:bg-white/5 border border-white/10 bg-background/50 backdrop-blur-md h-14 px-10"
             >
-              View Live Demo
+              Access Terminal
             </Link>
           </motion.div>
         </motion.div>
-      </div>
 
-      {/* Abstract Background Elements */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/20 rounded-full blur-[120px] -z-10 pointer-events-none opacity-50" />
+        {/* Floating 3D Dashboard Mockup */}
+        <motion.div
+          initial={{ opacity: 0, y: 100, rotateX: 20 }}
+          animate={{ opacity: 1, y: 0, rotateX: 0 }}
+          transition={{ duration: 1, delay: 0.5, type: "spring", bounce: 0.2 }}
+          className="mt-20 relative mx-auto max-w-5xl hidden md:block"
+        >
+          <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 h-full w-full" />
+          <div className="rounded-2xl border border-white/10 bg-card/60 backdrop-blur-xl shadow-2xl overflow-hidden transform perspective-1000">
+            <div className="border-b border-white/5 bg-black/40 px-4 py-3 flex items-center gap-2">
+              <div className="h-3 w-3 rounded-full bg-red-500/80" />
+              <div className="h-3 w-3 rounded-full bg-yellow-500/80" />
+              <div className="h-3 w-3 rounded-full bg-green-500/80" />
+              <div className="mx-auto bg-white/5 rounded-md px-24 py-1 text-xs text-white/40">
+                app.insightos.com/dashboard/analytics
+              </div>
+            </div>
+            <div className="p-8 grid grid-cols-3 gap-6 opacity-80 h-[400px]">
+              <div className="col-span-2 space-y-4">
+                <div className="h-10 w-48 bg-white/10 rounded-md animate-pulse" />
+                <div className="h-64 w-full bg-gradient-to-tr from-primary/20 to-purple-500/20 rounded-xl border border-white/5" />
+              </div>
+              <div className="space-y-4">
+                <div className="h-32 w-full bg-white/5 rounded-xl border border-white/5" />
+                <div className="h-32 w-full bg-white/5 rounded-xl border border-white/5 shadow-[0_0_30px_rgba(var(--primary),0.1)]" />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
 
-/* ── Bento Features ──────────────────────────────────────── */
-const FEATURES = [
-  {
-    title: "Bi-Directional WebSockets",
-    description:
-      "Fire tracking logs through scalable HTTP layers bridging directly onto synchronous dashboard canvases.",
-    icon: Activity,
-    className:
-      "col-span-1 md:col-span-2 lg:col-span-3 bg-card/40 border border-white/5 backdrop-blur-sm",
-  },
-  {
-    title: "AI Data Intel",
-    description:
-      "Vector-embedded mapping interprets loose queries converting raw behaviors into deterministic analysis instantly.",
-    icon: Bot,
-    className:
-      "col-span-1 md:col-span-1 lg:col-span-2 bg-gradient-to-br from-primary/10 to-transparent border border-primary/20",
-  },
-  {
-    title: "Zero-Trust RBAC",
-    description:
-      "Multi-matrix organizational governance wrapping JWT sessions perfectly natively.",
-    icon: Lock,
-    className:
-      "col-span-1 md:col-span-1 bg-card/40 border border-white/5 backdrop-blur-sm",
-  },
-];
+/* ── Interactive Bento Glow Card ────────────────────────── */
+interface CardProps {
+  title: string;
+  description: string;
+  icon: React.ElementType;
+  className?: string;
+  delay?: number;
+}
 
+function GlowCard({
+  title,
+  description,
+  icon: Icon,
+  className = "",
+  delay = 0,
+}: CardProps) {
+  let mouseX = useMotionValue(0);
+  let mouseY = useMotionValue(0);
+
+  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+    let { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.6, delay, ease: "easeOut" }}
+      onMouseMove={handleMouseMove}
+      className={`group relative rounded-3xl border border-white/10 bg-card/40 backdrop-blur-md px-8 py-10 flex flex-col overflow-hidden transition-colors hover:border-white/20 hover:bg-card/60 ${className}`}
+    >
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
+        style={{
+          background: useMotionTemplate`
+            radial-gradient(
+              650px circle at ${mouseX}px ${mouseY}px,
+              rgba(120,119,198,0.15),
+              transparent 80%
+            )
+          `,
+        }}
+      />
+
+      <div className="relative z-10">
+        <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 border border-primary/20 text-primary shadow-inner">
+          <Icon className="h-6 w-6" />
+        </div>
+        <h3 className="mb-3 text-xl font-bold tracking-tight text-white">
+          {title}
+        </h3>
+        <p className="text-sm font-medium text-muted-foreground leading-relaxed">
+          {description}
+        </p>
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Bento Features ──────────────────────────────────────── */
 export function BentoFeatures() {
   return (
-    <section className="py-24 relative">
+    <section className="py-32 relative z-20">
       <div className="container mx-auto px-6">
-        <div className="mb-16 max-w-2xl">
-          <h2 className="text-3xl font-bold tracking-tight mb-4">
-            Architecture Designed for Scale
+        <div className="mb-20 max-w-3xl text-center mx-auto">
+          <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
+            Designed for Structural Scale
           </h2>
-          <p className="text-muted-foreground">
-            Traditional analytics platforms lose telemetry context. We
-            aggregate, parse, and execute raw funnels dynamically leveraging
-            machine intelligence.
+          <p className="text-xl text-muted-foreground">
+            We bypass traditional vanity metrics by wrapping telemetry layers in
+            highly responsive, algorithmically structured socket grids.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-          {FEATURES.map((feat, i) => (
-            <motion.div
-              key={feat.title}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.5 }}
-              className={`rounded-2xl p-8 flex flex-col ${feat.className}`}
-            >
-              <feat.icon className="h-8 w-8 text-primary mb-6" />
-              <h3 className="text-lg font-bold mb-2">{feat.title}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                {feat.description}
-              </p>
-            </motion.div>
-          ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-min max-w-6xl mx-auto">
+          <GlowCard
+            title="Bi-Directional Trackers"
+            description="Continuous event logs are blasted through high-velocity HTTP bridges natively streaming back into secure dashboard realms."
+            icon={Activity}
+            delay={0.1}
+            className="md:col-span-2 lg:col-span-2"
+          />
+          <GlowCard
+            title="Embedded Conversational AI"
+            description="Translate multi-variable database queries into actionable visual analysis using GPT-4o embeddings mapping natively over zero-trust routes."
+            icon={Bot}
+            delay={0.2}
+            className="md:col-span-1"
+          />
+          <GlowCard
+            title="Role-Based Validation Matrices"
+            description="Multi-tier architectural RBAC ensuring your internal organization boundaries remain completely impervious and segmented."
+            icon={Lock}
+            delay={0.3}
+            className="md:col-span-1"
+          />
+          <GlowCard
+            title="Schemaless Document Architecture"
+            description="Fully-managed injection loops routing into raw Mongo Atlas environments preventing strict-schema deadlock under high traffic."
+            icon={Database}
+            delay={0.4}
+            className="md:col-span-2 lg:col-span-2"
+          />
         </div>
       </div>
     </section>
@@ -179,28 +304,35 @@ export function BentoFeatures() {
 /* ── Call To Action ──────────────────────────────────────── */
 export function CTASection() {
   return (
-    <section className="py-24 relative overflow-hidden">
+    <section className="py-32 relative overflow-hidden">
+      <div className="absolute inset-0 bg-primary/5 [mask-image:radial-gradient(ellipse_at_center,black,transparent_80%)]" />
       <div className="container mx-auto px-6 relative z-10">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, scale: 0.95, y: 40 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true }}
-          className="bg-primary/10 border border-primary/20 rounded-3xl p-12 md:p-16 text-center max-w-4xl mx-auto backdrop-blur-sm"
+          transition={{ type: "spring", stiffness: 100, damping: 20 }}
+          className="relative rounded-3xl p-1px overflow-hidden mx-auto max-w-5xl"
         >
-          <Code2 className="h-12 w-12 text-primary mx-auto mb-6" />
-          <h2 className="text-3xl md:text-5xl font-bold mb-6">
-            Deploy InsightOS Now
-          </h2>
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Join the frontier of algorithmic business mapping. Spin up your
-            analytics organizational dashboard in seconds.
-          </p>
-          <Link
-            href="/register"
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-12 px-8 text-lg"
-          >
-            Create Free Account
-          </Link>
+          {/* Animated gradient border */}
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-purple-500/30 to-primary/30 animate-[gradient_4s_linear_infinite] bg-[length:200%_auto]" />
+
+          <div className="relative bg-background/80 backdrop-blur-2xl rounded-3xl p-16 md:p-24 text-center border border-white/10">
+            <Network className="h-16 w-16 text-primary mx-auto mb-8 animate-pulse" />
+            <h2 className="text-4xl md:text-6xl font-extrabold mb-8 tracking-tight">
+              Are you ready to map the Matrix?
+            </h2>
+            <p className="text-xl md:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto">
+              Initialize a production-grade infrastructure immediately.
+              Integrate, deploy, and scale.
+            </p>
+            <Link
+              href="/register"
+              className="inline-flex items-center justify-center rounded-xl text-lg font-bold transition-all hover:scale-105 active:scale-95 bg-primary text-primary-foreground shadow-[0_0_40px_rgba(var(--primary),0.5)] h-16 px-12"
+            >
+              Spin up your cluster
+            </Link>
+          </div>
         </motion.div>
       </div>
     </section>
@@ -210,22 +342,28 @@ export function CTASection() {
 /* ── Footer ──────────────────────────────────────────────── */
 export function Footer() {
   return (
-    <footer className="border-t border-white/5 py-12">
-      <div className="container mx-auto px-6 text-center text-sm text-muted-foreground">
-        <Activity className="h-6 w-6 text-primary mx-auto mb-4" />
-        <p className="font-semibold mb-2 text-foreground">
-          InsightOS Analytics Platform
+    <footer className="border-t border-white/[0.05] py-16 bg-background relative z-10">
+      <div className="container mx-auto px-6 text-center">
+        <div className="inline-flex items-center justify-center p-2 rounded-xl bg-primary/10 border border-primary/20 mb-6">
+          <Activity className="h-6 w-6 text-primary" />
+        </div>
+        <p className="text-xl font-bold tracking-tight text-white mb-2">
+          InsightOS Platform
         </p>
-        <p className="mb-4">
-          Engineered to track every move. Built to interpret every behavior.
+        <p className="text-sm text-muted-foreground mb-12 max-w-sm mx-auto">
+          Engineered to track every trajectory. Built to intercept every
+          anomaly.
         </p>
-        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between">
-          <p>© {new Date().getFullYear()} InsightOS. All rights reserved.</p>
-          <p className="mt-4 md:mt-0">
+        <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between text-sm text-muted-foreground font-medium">
+          <p>
+            © {new Date().getFullYear()} InsightOS Structure. All rights
+            reserved.
+          </p>
+          <p className="mt-4 md:mt-0 flex items-center justify-center gap-1.5">
             Produced & Maintained by{" "}
             <a
               href="https://gyanlabs.io"
-              className="text-primary hover:underline"
+              className="text-primary hover:text-white transition-colors underline decoration-primary/50 underline-offset-4"
             >
               GyanLabs.io Studio
             </a>
