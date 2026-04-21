@@ -82,7 +82,7 @@ export function HeroSection() {
       <div className="absolute inset-0 overflow-hidden pointer-events-none -z-10">
         <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[150px] animate-pulse" />
         <div
-          className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-purple-600/20 blur-[150px] animate-pulse"
+          className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-cyan-400/10 blur-[150px] animate-pulse"
           style={{ animationDelay: "2s" }}
         />
       </div>
@@ -119,7 +119,7 @@ export function HeroSection() {
             className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tighter mb-8 leading-[1.1]"
           >
             Measure SaaS Scale with{" "}
-            <span className="bg-gradient-to-r from-primary via-purple-500 to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_8s_ease_infinite]">
+            <span className="bg-gradient-to-r from-primary via-cyan-400 to-primary bg-clip-text text-transparent bg-[length:200%_auto] animate-[gradient_8s_ease_infinite]">
               Algorithmic Precision.
             </span>
           </motion.h1>
@@ -175,7 +175,7 @@ export function HeroSection() {
             <div className="p-8 grid grid-cols-3 gap-6 opacity-80 h-[400px]">
               <div className="col-span-2 space-y-4">
                 <div className="h-10 w-48 bg-white/10 rounded-md animate-pulse" />
-                <div className="h-64 w-full bg-gradient-to-tr from-primary/20 to-purple-500/20 rounded-xl border border-white/5" />
+                <div className="h-64 w-full bg-gradient-to-tr from-primary/20 to-cyan-400/20 rounded-xl border border-white/5" />
               </div>
               <div className="space-y-4">
                 <div className="h-32 w-full bg-white/5 rounded-xl border border-white/5" />
@@ -315,7 +315,7 @@ export function CTASection() {
           className="relative rounded-3xl p-1px overflow-hidden mx-auto max-w-5xl"
         >
           {/* Animated gradient border */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-purple-500/30 to-primary/30 animate-[gradient_4s_linear_infinite] bg-[length:200%_auto]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/30 via-cyan-400/30 to-primary/30 animate-[gradient_4s_linear_infinite] bg-[length:200%_auto]" />
 
           <div className="relative bg-background/80 backdrop-blur-2xl rounded-3xl p-16 md:p-24 text-center border border-white/10">
             <Network className="h-16 w-16 text-primary mx-auto mb-8 animate-pulse" />
