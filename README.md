@@ -83,4 +83,6 @@ JWT_REFRESH_SECRET=isolated_refresh_hash
 
 <div align="center">
     <p>Engineered to track every move. Built to interpret every behavior.</p>
+    <br/>
+    <p><i>Produced & Maintained by <a href="https://gyanlabs.io">GyanLabs.io Studio</a></i></p>
 </div>
