@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyAccessToken } from '../utils/jwt';
-import { isTokenBlacklisted } from '../utils/redis';
 
 export interface AuthRequest extends Request {
   user?: {
@@ -23,11 +22,6 @@ export async function authMiddleware(
     }
 
     const token = authHeader.split(' ')[1];
-    const blacklisted = await isTokenBlacklisted(token);
-    if (blacklisted) {
-      res.status(401).json({ error: 'Token revoked', code: 'TOKEN_REVOKED' });
-      return;
-    }
 
     const payload = verifyAccessToken(token);
     req.user = payload;

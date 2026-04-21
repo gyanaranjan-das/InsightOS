@@ -3,7 +3,6 @@ import { User } from '../models/User';
 import { Organization } from '../models/Organization';
 import { hashPassword, comparePassword } from '../utils/password';
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from '../utils/jwt';
-import { blacklistToken } from '../utils/redis';
 import { AuthRequest } from '../middleware/auth';
 
 export async function register(req: Request, res: Response): Promise<void> {
@@ -128,7 +127,7 @@ export async function logout(req: AuthRequest, res: Response): Promise<void> {
     const authHeader = req.headers.authorization;
     if (authHeader?.startsWith('Bearer ')) {
       const token = authHeader.split(' ')[1];
-      await blacklistToken(token, 900);
+
     }
 
     if (req.user) {

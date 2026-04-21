@@ -3,7 +3,7 @@ import { Event } from '../models/Event';
 import { Project } from '../models/Project';
 import { ApiKeyRequest } from '../middleware/apiKeyAuth';
 import { AuthRequest } from '../middleware/auth';
-import { cacheGet, cacheSet, cacheDel } from '../utils/redis';
+
 import { getIO } from '../realtime/socketServer';
 import mongoose from 'mongoose';
 
@@ -26,7 +26,6 @@ export async function trackEvent(req: ApiKeyRequest, res: Response): Promise<voi
       timestamp: timestamp ? new Date(timestamp) : new Date(),
     });
 
-    await cacheDel(`events:${req.project!.orgId}:*`);
 
     const io = getIO();
     if (io) {
@@ -72,7 +71,6 @@ export async function trackBatch(req: ApiKeyRequest, res: Response): Promise<voi
     }));
 
     await Event.insertMany(docs);
-    await cacheDel(`events:${req.project!.orgId}:*`);
 
     res.status(201).json({ count: docs.length, status: 'tracked' });
   } catch (error) {
@@ -101,12 +99,6 @@ export async function listEvents(req: AuthRequest, res: Response): Promise<void>
       return;
     }
 
-    const cacheKey = `events:${orgId}:list:${page}:${limit}`;
-    const cached = await cacheGet(cacheKey);
-    if (cached) {
-      res.json(JSON.parse(cached));
-      return;
-    }
 
     const objectIds = projectIds.map((id) => new mongoose.Types.ObjectId(id));
     const [events, total] = await Promise.all([
@@ -119,7 +111,7 @@ export async function listEvents(req: AuthRequest, res: Response): Promise<void>
     ]);
 
     const result = { events, total, page, pages: Math.ceil(total / limit) };
-    await cacheSet(cacheKey, JSON.stringify(result), 60);
+
     res.json(result);
   } catch (error) {
     console.error('List events error:', error);
@@ -134,12 +126,6 @@ export async function eventsSummary(req: AuthRequest, res: Response): Promise<vo
     const days = parseInt(req.query.days as string) || 30;
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
-    const cacheKey = `events:${orgId}:summary:${days}`;
-    const cached = await cacheGet(cacheKey);
-    if (cached) {
-      res.json(JSON.parse(cached));
-      return;
-    }
 
     const projectIds = await getOrgProjectIds(orgId);
     const objectIds = projectIds.map((id) => new mongoose.Types.ObjectId(id));
@@ -158,7 +144,7 @@ export async function eventsSummary(req: AuthRequest, res: Response): Promise<vo
       period: `${days}d`,
     };
 
-    await cacheSet(cacheKey, JSON.stringify(result), 60);
+
     res.json(result);
   } catch (error) {
     console.error('Summary error:', error);
@@ -173,12 +159,6 @@ export async function eventsTimeseries(req: AuthRequest, res: Response): Promise
     const days = parseInt(req.query.days as string) || 30;
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
-    const cacheKey = `events:${orgId}:timeseries:${days}`;
-    const cached = await cacheGet(cacheKey);
-    if (cached) {
-      res.json(JSON.parse(cached));
-      return;
-    }
 
     const projectIds = await getOrgProjectIds(orgId);
     const objectIds = projectIds.map((id) => new mongoose.Types.ObjectId(id));
@@ -199,7 +179,7 @@ export async function eventsTimeseries(req: AuthRequest, res: Response): Promise
     const data = await Event.aggregate(pipeline);
     const result = data.map((d) => ({ date: d._id, count: d.count }));
 
-    await cacheSet(cacheKey, JSON.stringify(result), 60);
+
     res.json(result);
   } catch (error) {
     console.error('Timeseries error:', error);
@@ -214,12 +194,6 @@ export async function topEvents(req: AuthRequest, res: Response): Promise<void> 
     const days = parseInt(req.query.days as string) || 30;
     const since = new Date(Date.now() - days * 24 * 60 * 60 * 1000);
 
-    const cacheKey = `events:${orgId}:top:${days}`;
-    const cached = await cacheGet(cacheKey);
-    if (cached) {
-      res.json(JSON.parse(cached));
-      return;
-    }
 
     const projectIds = await getOrgProjectIds(orgId);
     const objectIds = projectIds.map((id) => new mongoose.Types.ObjectId(id));
@@ -234,7 +208,7 @@ export async function topEvents(req: AuthRequest, res: Response): Promise<void> 
     const data = await Event.aggregate(pipeline);
     const result = data.map((d) => ({ name: d._id, count: d.count }));
 
-    await cacheSet(cacheKey, JSON.stringify(result), 60);
+
     res.json(result);
   } catch (error) {
     console.error('Top events error:', error);

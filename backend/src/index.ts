@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import http from 'http';
 import { connectDB } from './config/database';
-import { connectRedis } from './utils/redis';
+
 import { setupSocketServer } from './realtime/socketServer';
 import authRoutes from './routes/auth';
 import eventRoutes from './routes/events';
@@ -51,7 +51,7 @@ const PORT = parseInt(process.env.PORT || '4000', 10);
 
 async function bootstrap() {
   await connectDB();
-  await connectRedis();
+
   setupSocketServer(server);
 
   server.listen(PORT, () => {
