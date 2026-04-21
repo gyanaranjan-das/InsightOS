@@ -1,4 +1,8 @@
 import mongoose from 'mongoose';
+import dns from 'dns';
+
+// Override default DNS servers with Google's public DNS to solve SRV query errors
+dns.setServers(['8.8.8.8', '8.8.4.4']);
 
 export async function connectDB(): Promise<void> {
   const uri = process.env.MONGODB_URI;
